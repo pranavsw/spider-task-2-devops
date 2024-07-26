@@ -1,1 +1,42 @@
+version: '3'
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - "3001:3001"
+    depends_on:
+      - rabbitmq
+      - redis
+    environment:
+      - DATABASE_URL=postgres://user:password@localhost:5432/database
 
+  product-service:
+    build: ./product-service
+    ports:
+      - "3002:3002"
+    depends_on:
+      - rabbitmq
+      - redis
+    environment:
+      - DATABASE_URL=postgres://user:password@localhost:5432/database
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "3003:3003"
+    depends_on:
+      - rabbitmq
+      - redis
+    environment:
+      - DATABASE_URL=postgres://user:password@localhost:5432/database
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
